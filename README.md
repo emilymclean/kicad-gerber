@@ -15,7 +15,7 @@ Generates gerber & drill files for a specified PCB and places them in a specifie
 
 ## Example usage
 ```
-uses: BenMMcLean/kicad-gerber@v2.0.5
+uses: emilymclean/kicad-gerber@v2.0.5
 with:
   input-file: pcb.kicad_pcb
 ```
