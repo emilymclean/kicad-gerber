@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.gitversion.outputs.semVer }}
+      major: ${{ steps.gitversion.outputs.major }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -105,7 +106,7 @@ jobs:
         uses: emilymclean/template-render-action@v1.0.2
         env:
           ACTION_REPO: ${{ github.repository }}
-          ACTION_VERSION: ${{ needs.version.outputs.version }}
+          ACTION_VERSION: ${{ needs.version.outputs.major }}
         with:
           template-file: templates/README.template.md
           output-file: README.md
@@ -139,6 +140,10 @@ jobs:
           tag_name: v${{ needs.version.outputs.version }}
           name: Release ${{ needs.version.outputs.version }}
           prerelease: ${{ github.ref == 'refs/heads/develop' }}
+      - uses: jimeh/update-tags-action@v1
+        if: github.ref == 'refs/heads/main'
+        with:
+          tags: v${{ needs.version.outputs.major }}
   release-other:
     runs-on: ubuntu-latest
     needs: 
