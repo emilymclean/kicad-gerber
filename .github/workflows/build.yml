@@ -128,10 +128,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Create tag for release
         uses: rickstaa/action-create-tag@v1
         with:
           tag: v${{ needs.version.outputs.version }}
+          commit_sha: ${{ needs.update-image.outputs.commit_hash }}
       - id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
