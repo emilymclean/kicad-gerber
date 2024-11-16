@@ -27,14 +27,14 @@ inputs:
     default: "in"
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/emilymclean/kicad-gerber:2.0.6'
+  image: '{{ .image }}'
   args:
-    - ${{ inputs.input-file }}
-    - ${{ inputs.output-directory }}
-    - ${{ inputs.drill-format }}
-    - ${{ inputs.drill-units }}
-    - ${{ inputs.position-format }}
-    - ${{ inputs.position-units }}
+    - ${{`{{ inputs.input-file }}`}}
+    - ${{`{{ inputs.output-directory }}`}}
+    - ${{`{{ inputs.drill-format }}`}}
+    - ${{`{{ inputs.drill-units }}`}}
+    - ${{`{{ inputs.position-format }}`}}
+    - ${{`{{ inputs.position-units }}`}}
 branding:
   icon: 'cpu'
   color: 'green'

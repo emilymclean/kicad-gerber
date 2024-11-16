@@ -23,7 +23,6 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.6
         with:
           useConfigFile: true
-          showConfig: true
           configFilePath: ./gitversion.yml
       - name: Display SemVer
         run: |
@@ -98,12 +97,23 @@ jobs:
         id: render_template
         uses: chuhlomin/render-template@v1
         with:
-          template: action.template.yml
+          template: templates/action.template.yml
           result_path: action.yml
           vars: |
-            image: ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
+            image: docker://ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
+      - name: Update README.md
+        uses: recih/template-render-action@v1.0.2
+        env:
+          ACTION_REPO: ${{ github.repository }}
+          ACTION_VERSION: ${{ needs.version.outputs.version }}
+        with:
+          template-file: templates/README.template.md
+          output-file: README.md
+          engine: mustache
       - uses: stefanzweifel/git-auto-commit-action@v5
         id: auto-commit
+        with:
+          commit_message: "Update metadata for ${{ github.event.commits[0].message }}"
   release-main:
     runs-on: ubuntu-latest
     needs: 

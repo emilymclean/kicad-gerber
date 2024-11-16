@@ -1,0 +1,51 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [ master, main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          repository: FPGAwars/icezum
+          ref: dbad423670419b82018bf6e33c418fc35558c1be
+          path: proj
+      - name: Render template
+        id: render_template
+        uses: chuhlomin/render-template@v1
+        with:
+          template: templates/action.template.yml
+          result_path: action.yml
+          vars: |
+            image: Dockerfile
+      - uses: ./
+        with:
+          input-file: proj/src-kicad/icezum.kicad_pcb
+          output-directory: out
+          position-format: gerber
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test-gerber
+          path: out/
+  test-readme-generation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Update README.md
+        uses: recih/template-render-action@v1.0.2
+        env:
+          ACTION_REPO: ${{ github.repository }}
+          ACTION_VERSION: v1.0.0
+        with:
+          template-file: templates/README.template.md
+          output-file: README.md
+          engine: mustache
+      - name: Cat
+        run: cat README.md
