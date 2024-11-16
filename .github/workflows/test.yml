@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: FPGAwars/icezum
           ref: dbad423670419b82018bf6e33c418fc35558c1be
@@ -37,9 +37,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Update README.md
-        uses: recih/template-render-action@v1.0.2
+        uses: emilymclean/template-render-action@v1.0.2
         env:
           ACTION_REPO: ${{ github.repository }}
           ACTION_VERSION: v1.0.0
