@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+export HOME="/home/kicad"
 
 output="/github/workspace/$2"
 input="/github/workspace/$1"

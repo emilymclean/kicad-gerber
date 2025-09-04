@@ -1,10 +1,14 @@
-FROM ubuntu:22.04
+ARG KICAD_VERSION="9.0"
+FROM kicad/kicad:${KICAD_VERSION}
 
+ARG USER_NAME
+USER root
+
+RUN mkdir -p /github/workspace && chown -R ${USER_NAME}:${USER_NAME} /github
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -yqq software-properties-common
-RUN add-apt-repository --yes ppa:kicad/kicad-8.0-releases
-RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -yqq --no-install-recommends kicad kicad-footprints kicad-libraries
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -yqq --no-install-recommends poppler-utils librsvg2-bin
+
+USER ${USER_NAME}
 
 COPY entrypoint.sh /entrypoint.sh
 
